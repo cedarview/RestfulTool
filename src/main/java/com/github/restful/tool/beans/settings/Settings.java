@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.*;
@@ -67,10 +68,9 @@ public class Settings {
                         continue;
                     }
                     Object value = declaredField.get(null);
-                    if (!(value instanceof SettingKey)) {
+                    if (!(value instanceof SettingKey<?> settingKey)) {
                         continue;
                     }
-                    SettingKey<?> settingKey = (SettingKey<?>) value;
                     Option option = settingKey.getOption();
                     if (!(option instanceof JComponent)) {
                         continue;
@@ -90,7 +90,7 @@ public class Settings {
         if (setting == null) {
             return;
         }
-        setting.properties.forEach(this.properties::put);
+        this.properties.putAll(setting.properties);
     }
 
     public <T> T getData(@NotNull SettingKey<T> key) {
@@ -224,7 +224,7 @@ public class Settings {
                 Bundle.getString("setting.httpTools.DefaultContextPathOfTheContainer"),
                 "/",
                 data -> {
-                    if (data == null || data.length() < 1) {
+                    if (data == null || data.isEmpty()) {
                         return false;
                     }
                     data = data.trim();

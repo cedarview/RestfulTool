@@ -51,7 +51,7 @@ public class RestUtil {
                     project, scope,
                     ProjectConfigUtil.SERVER_PORT
             );
-            if (value == null || "".equals((value = value.trim()))) {
+            if (value == null || (value = value.trim()).isEmpty()) {
                 throw new NumberFormatException();
             }
             port = Integer.parseInt(value);
@@ -74,7 +74,7 @@ public class RestUtil {
 
         try {
             String value = ProjectConfigUtil.getApplicationConfig(project, scope, "server.ssl.enabled");
-            if (value == null || "".equals((value = value.trim()))) {
+            if (value == null || (value = value.trim()).isEmpty()) {
                 throw new Exception();
             }
             if (Boolean.parseBoolean(value)) {
@@ -160,8 +160,7 @@ public class RestUtil {
                         Field myElement = clazz.getSuperclass().getDeclaredField("myElement");
                         myElement.setAccessible(true);
                         Object elObj = myElement.get(value);
-                        if (elObj instanceof PsiExpression) {
-                            PsiExpression expression = (PsiExpression) elObj;
+                        if (elObj instanceof PsiExpression expression) {
                             list.add(expression.getText());
                         }
                     } catch (Exception ignore) {

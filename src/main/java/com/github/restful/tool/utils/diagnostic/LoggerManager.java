@@ -10,7 +10,7 @@
  */
 package com.github.restful.tool.utils.diagnostic;
 
-import org.apache.log4j.Logger;
+import com.intellij.openapi.diagnostic.Logger;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -36,13 +36,13 @@ public class LoggerManager {
 
     @NotNull
     public static Logger getLogger(@NotNull String className) {
-        Logger logger = Logger.getLogger(className);
+        Logger logger = Logger.getInstance(className);
         getAppender().applyDebug(logger);
         return logger;
     }
 
     @NotNull
-    public static org.apache.log4j.Logger getLogger(@NotNull Class<?> clazz) {
+    public static Logger getLogger(@NotNull Class<?> clazz) {
         return getLogger(clazz.getName());
     }
 }

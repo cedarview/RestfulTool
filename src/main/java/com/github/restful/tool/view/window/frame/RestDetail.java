@@ -106,14 +106,7 @@ public class RestDetail extends JPanel {
 
     public RestDetail(@NotNull Project project) {
         this.project = project;
-        this.poolExecutor = new ThreadPoolExecutor(
-                1,
-                1,
-                1000,
-                TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(8),
-                new ThreadPoolExecutor.DiscardOldestPolicy()
-        );
+        this.poolExecutor = new ThreadPoolExecutor(1, 1, 1000, TimeUnit.SECONDS, new LinkedBlockingQueue<>(8), new ThreadPoolExecutor.DiscardOldestPolicy());
         this.convert = new ParamsConvert();
 
         this.headCache = new HashMap<>();
@@ -167,12 +160,7 @@ public class RestDetail extends JPanel {
 
         JPanel bodyFileTypePanel = new JPanel(new BorderLayout());
         bodyFileTypePanel.add(new JBLabel(Bundle.message("other.restDetail.chooseBodyFileType")), BorderLayout.WEST);
-        requestBodyFileType = new ComboBox<>(new FileType[]{
-                JsonEditor.TEXT_FILE_TYPE,
-                JsonEditor.JSON_FILE_TYPE,
-                JsonEditor.HTML_FILE_TYPE,
-                JsonEditor.XML_FILE_TYPE
-        });
+        requestBodyFileType = new ComboBox<>(new FileType[]{JsonEditor.TEXT_FILE_TYPE, JsonEditor.JSON_FILE_TYPE, JsonEditor.HTML_FILE_TYPE, JsonEditor.XML_FILE_TYPE});
         requestBodyFileType.setFocusable(false);
         bodyFileTypePanel.add(requestBodyFileType, BorderLayout.CENTER);
         bodyFileTypePanel.setBorder(JBUI.Borders.emptyLeft(3));
@@ -186,7 +174,7 @@ public class RestDetail extends JPanel {
         // 发送请求按钮监听
         sendRequest.addActionListener(event -> {
             String url = requestUrl.getText();
-            if (url == null || "".equals(url.trim())) {
+            if (url == null || url.trim().isEmpty()) {
                 requestUrl.requestFocus();
                 return;
             }
@@ -200,15 +188,14 @@ public class RestDetail extends JPanel {
         requestBodyFileType.setRenderer(new FileTypeRenderer());
         requestBodyFileType.addItemListener(e -> {
             Object selectedObject = e.getItemSelectable().getSelectedObjects()[0];
-            if (selectedObject instanceof FileType) {
-                FileType fileType = (FileType) selectedObject;
+            if (selectedObject instanceof FileType fileType) {
                 requestBody.setFileType(fileType);
                 setCacheType(fileType);
             }
         });
 
         MessageBusConnection messageBusConnection = project.getMessageBus().connect();
-        messageBusConnection.subscribe(RestDetailTopic.TOPIC, request -> {
+        messageBusConnection.subscribe(RestDetailTopic.TOPIC, (RestDetailTopic) request -> {
             if (request != null) {
                 headCache.remove(request);
                 bodyCache.remove(request);
@@ -329,26 +316,17 @@ public class RestDetail extends JPanel {
         try {
             if (request != null) {
                 GlobalSearchScope scope = request.getPsiElement().getResolveScope();
-                reqUrl = SystemUtil.buildUrl(
-                        RestUtil.scanListenerProtocol(project, scope),
-                        RestUtil.scanListenerPort(project, scope),
-                        RestUtil.scanContextPath(project, scope),
-                        request.getPath()
-                );
+                reqUrl = SystemUtil.buildUrl(RestUtil.scanListenerProtocol(project, scope), RestUtil.scanListenerPort(project, scope), RestUtil.scanContextPath(project, scope), request.getPath());
 
                 // 选择Body页面
                 tabs.select(bodyTab, false);
 
-                selItem = request.getMethod() == null || request.getMethod() == HttpMethod.REQUEST ?
-                        HttpMethod.GET : request.getMethod();
+                selItem = request.getMethod() == null || request.getMethod() == HttpMethod.REQUEST ? HttpMethod.GET : request.getMethod();
 
                 if (headCache.containsKey(request)) {
                     reqHead = getCache(IDENTITY_HEAD, request);
                 } else {
-                    reqHead = String.format(
-                            "{\n  \"Content-Type\": \"%s\"\n}",
-                            Settings.HttpToolOptionForm.CONTENT_TYPE.getData().getValue()
-                    );
+                    reqHead = String.format("{\n  \"Content-Type\": \"%s\"\n}", Settings.HttpToolOptionForm.CONTENT_TYPE.getData().getValue());
                     setCache(IDENTITY_HEAD, request, reqHead);
                 }
 
@@ -387,10 +365,10 @@ public class RestDetail extends JPanel {
 
     private HttpRequest getHttpRequest(@NotNull HttpMethod method, @NotNull String url, String head, String body) {
         HttpRequest request = HttpUtil.createRequest(Method.valueOf(method.name()), url).timeout(REQUEST_TIMEOUT);
-        if (head != null && !"".equals(head.trim())) {
+        if (head != null && !head.trim().isEmpty()) {
             convert.formatMap(head).forEach((s, o) -> request.header(s, (String) o));
         }
-        if (body != null && !"".equals(body.trim())) {
+        if (body != null && !body.trim().isEmpty()) {
             Map<String, Object> formData = convert.formatMap(body);
             if (formData != null && !convert.isRaw()) {
                 formData.forEach(request::form);

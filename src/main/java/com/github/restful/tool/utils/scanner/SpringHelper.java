@@ -57,11 +57,7 @@ public class SpringHelper {
         List<Request> parentRequests = new ArrayList<>();
         List<Request> childrenRequests = new ArrayList<>();
 
-        PsiAnnotation psiAnnotation = RestUtil.getClassAnnotation(
-                psiClass,
-                SpringHttpMethodAnnotation.REQUEST_MAPPING.getQualifiedName(),
-                SpringHttpMethodAnnotation.REQUEST_MAPPING.getShortName()
-        );
+        PsiAnnotation psiAnnotation = RestUtil.getClassAnnotation(psiClass, SpringHttpMethodAnnotation.REQUEST_MAPPING.getQualifiedName(), SpringHttpMethodAnnotation.REQUEST_MAPPING.getShortName());
         if (psiAnnotation != null) {
             parentRequests = getRequests(psiAnnotation, null);
         }
@@ -97,25 +93,16 @@ public class SpringHelper {
         List<PsiClass> allControllerClass = new ArrayList<>();
 
         GlobalSearchScope moduleScope = ProjectConfigUtil.getModuleScope(module);
-        Collection<PsiAnnotation> pathList = JavaAnnotationIndex.getInstance().get(
-                Control.Controller.getName(),
-                project,
-                moduleScope
-        );
-        pathList.addAll(JavaAnnotationIndex.getInstance().get(
-                Control.RestController.getName(),
-                project,
-                moduleScope
-        ));
+        Collection<PsiAnnotation> pathList = JavaAnnotationIndex.getInstance().getAnnotations(Control.Controller.getName(), project, moduleScope);
+        pathList.addAll(JavaAnnotationIndex.getInstance().getAnnotations(Control.RestController.getName(), project, moduleScope));
         for (PsiAnnotation psiAnnotation : pathList) {
             PsiModifierList psiModifierList = (PsiModifierList) psiAnnotation.getParent();
             PsiElement psiElement = psiModifierList.getParent();
 
-            if (!(psiElement instanceof PsiClass)) {
+            if (!(psiElement instanceof PsiClass psiClass)) {
                 continue;
             }
 
-            PsiClass psiClass = (PsiClass) psiElement;
             allControllerClass.add(psiClass);
         }
         return allControllerClass;
@@ -130,9 +117,7 @@ public class SpringHelper {
      */
     @NotNull
     private static List<Request> getRequests(@NotNull PsiAnnotation annotation, @Nullable PsiMethod psiMethod) {
-        SpringHttpMethodAnnotation spring = SpringHttpMethodAnnotation.getByQualifiedName(
-                annotation.getQualifiedName()
-        );
+        SpringHttpMethodAnnotation spring = SpringHttpMethodAnnotation.getByQualifiedName(annotation.getQualifiedName());
         if (annotation.getResolveScope().isSearchInLibraries()) {
             spring = SpringHttpMethodAnnotation.getByShortName(annotation.getQualifiedName());
         }
@@ -190,12 +175,7 @@ public class SpringHelper {
                 List<Object> list = (List) value;
                 list.forEach(item -> paths.add(SystemUtil.formatPath(item)));
             } else {
-                throw new RuntimeException(String.format(
-                        "Scan api: %s\n" +
-                                "Class: %s",
-                        value,
-                        value != null ? value.getClass() : null
-                ));
+                throw new RuntimeException(String.format("Scan api: %s\n" + "Class: %s", value, value != null ? value.getClass() : null));
             }
             hasImplicitPath = false;
         }
@@ -217,11 +197,7 @@ public class SpringHelper {
                 if (method.equals(HttpMethod.REQUEST) && methods.size() > 1) {
                     continue;
                 }
-                requests.add(new Request(
-                        method,
-                        path,
-                        psiMethod
-                ));
+                requests.add(new Request(method, path, psiMethod));
             }
         });
         return requests;
@@ -245,10 +221,7 @@ public class SpringHelper {
 
     @Nullable
     private static CustomRefAnnotation findCustomAnnotation(@NotNull PsiAnnotation psiAnnotation) {
-        PsiAnnotation qualifiedAnnotation = RestUtil.getQualifiedAnnotation(
-                psiAnnotation,
-                SpringHttpMethodAnnotation.REQUEST_MAPPING.getQualifiedName()
-        );
+        PsiAnnotation qualifiedAnnotation = RestUtil.getQualifiedAnnotation(psiAnnotation, SpringHttpMethodAnnotation.REQUEST_MAPPING.getQualifiedName());
         if (qualifiedAnnotation == null) {
             return null;
         }
@@ -335,7 +308,7 @@ public class SpringHelper {
     public static boolean isRestfulProject(@NotNull final Project project, @NotNull final Module module) {
         try {
             JavaAnnotationIndex instance = JavaAnnotationIndex.getInstance();
-            Set<PsiAnnotation> annotations = new HashSet<>(instance.get(Control.Controller.getName(), project, module.getModuleScope()));
+            Set<PsiAnnotation> annotations = new HashSet<>(instance.getAnnotations(Control.Controller.getName(), project, module.getModuleScope()));
             if (!annotations.isEmpty()) {
                 for (PsiAnnotation annotation : annotations) {
                     if (annotation == null) {
@@ -347,7 +320,7 @@ public class SpringHelper {
                 }
             }
             annotations.clear();
-            annotations.addAll(instance.get(Control.RestController.getName(), project, module.getModuleScope()));
+            annotations.addAll(instance.getAnnotations(Control.RestController.getName(), project, module.getModuleScope()));
             if (!annotations.isEmpty()) {
                 for (PsiAnnotation annotation : annotations) {
                     if (annotation == null) {

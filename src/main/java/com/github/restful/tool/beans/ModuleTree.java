@@ -60,10 +60,6 @@ public class ModuleTree {
 
     @Override
     public String toString() {
-        return String.format(
-                "[%d]%s",
-                apiCounts,
-                moduleName
-        );
+        return String.format("[%s] found [%d] apis", moduleName, apiCounts);
     }
 }

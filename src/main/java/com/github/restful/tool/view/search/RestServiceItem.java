@@ -82,8 +82,7 @@ public class RestServiceItem implements NavigationItem {
                     }
                     location += "#" + psiMethod.getName();
                     location = "Java: (" + location + ")";
-                } else if (psiElement instanceof KtNamedFunction) {
-                    KtNamedFunction function = (KtNamedFunction) psiElement;
+                } else if (psiElement instanceof KtNamedFunction function) {
                     location = ((KtClass) function.getParent().getParent()).getName();
                     location += "#" + function.getName();
                     location = "Kotlin: (" + location + ")";

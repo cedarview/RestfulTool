@@ -111,9 +111,8 @@ public class ProjectConfigUtil {
             }
             return null;
         }
-        if (conf instanceof PropertiesFile) {
+        if (conf instanceof PropertiesFile propertiesFile) {
             // application.properties
-            PropertiesFile propertiesFile = (PropertiesFile) conf;
             String result = getPropertiesValue(propertiesFile, propName);
 
             String active = getPropertiesValue(propertiesFile, "spring.profiles.active");
@@ -128,9 +127,8 @@ public class ProjectConfigUtil {
                 }
             }
             return result;
-        } else if (conf instanceof YAMLFile) {
+        } else if (conf instanceof YAMLFile yamlFile) {
             // application.yml
-            YAMLFile yamlFile = (YAMLFile) conf;
 
             // 获取application.yml文件默认profile的value
             String result = getYamlValue(yamlFile, propName.split("\\."));
@@ -251,15 +249,13 @@ public class ProjectConfigUtil {
 
     @Nullable
     private static String getYamlValue(@NotNull Object psiFile, @NotNull String... propNames) {
-        if (psiFile instanceof YAMLFile) {
-            YAMLFile config = (YAMLFile) psiFile;
+        if (psiFile instanceof YAMLFile config) {
             YAMLKeyValue resultValue = YAMLUtil.getQualifiedKeyInFile(config, propNames);
             if (resultValue != null) {
                 return resultValue.getValueText();
             }
         }
-        if (psiFile instanceof YAMLDocument) {
-            YAMLDocument document = (YAMLDocument) psiFile;
+        if (psiFile instanceof YAMLDocument document) {
             YAMLKeyValue resultValue = YAMLUtil.getQualifiedKeyInDocument(document, Arrays.asList(propNames));
             if (resultValue != null) {
                 return resultValue.getValueText();

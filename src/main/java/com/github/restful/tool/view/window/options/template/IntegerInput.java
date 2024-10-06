@@ -59,8 +59,7 @@ public class IntegerInput extends BaseInput<Integer> {
                 if (keyChar < KeyEvent.VK_0 || keyChar > KeyEvent.VK_9) {
                     if (withDouble && keyChar == KeyEvent.VK_PERIOD) {
                         Component component = event.getComponent();
-                        if (component instanceof JTextField) {
-                            JTextField field = (JTextField) component;
+                        if (component instanceof JTextField field) {
                             if (field.getText() != null && field.getText().contains(String.valueOf((char) KeyEvent.VK_PERIOD))) {
                                 event.consume();
                             }

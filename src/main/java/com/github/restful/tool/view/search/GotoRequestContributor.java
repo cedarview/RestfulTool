@@ -37,7 +37,7 @@ public class GotoRequestContributor implements ChooseByNameContributor {
 
     @NotNull
     @Override
-    public String[] getNames(Project project, boolean includeNonProjectItems) {
+    public String @NotNull [] getNames(Project project, boolean includeNonProjectItems) {
         List<String> names;
 
         List<Request> requests;
@@ -64,7 +64,7 @@ public class GotoRequestContributor implements ChooseByNameContributor {
 
     @NotNull
     @Override
-    public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
+    public NavigationItem @NotNull [] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
         List<NavigationItem> list = new ArrayList<>();
         itemList.stream()
                 .filter(item -> item.getName() != null && item.getName().equals(name))

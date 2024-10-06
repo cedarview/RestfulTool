@@ -89,15 +89,11 @@ public class KotlinUtil {
             } else {
                 parentPaths.forEach(parentPath -> children.forEach(childrenRequest -> {
                     if (childrenRequest.getMethod() != null && childrenRequest.getMethod() != HttpMethod.REQUEST) {
-                        Request request = childrenRequest.copyWithParent(
-                                new Request(null, parentPath, null)
-                        );
+                        Request request = childrenRequest.copyWithParent(new Request(null, parentPath, null));
                         ktRequests.add(request);
                     } else {
                         for (HttpMethod parentMethod : parentMethods) {
-                            Request request = childrenRequest.copyWithParent(
-                                    new Request(parentMethod, parentPath, null)
-                            );
+                            Request request = childrenRequest.copyWithParent(new Request(parentMethod, parentPath, null));
                             ktRequests.add(request);
                         }
                     }
@@ -139,10 +135,9 @@ public class KotlinUtil {
             serviceStub.path(null);
         } else {
             for (ValueArgument valueArgument : valueArguments) {
-                if (!(valueArgument instanceof KtValueArgument)) {
+                if (!(valueArgument instanceof KtValueArgument ktValueArgument)) {
                     continue;
                 }
-                KtValueArgument ktValueArgument = (KtValueArgument) valueArgument;
                 if (ktValueArgument.isNamed()) {
                     KtValueArgumentName argumentName = ktValueArgument.getArgumentName();
                     if (argumentName == null) {
@@ -151,21 +146,17 @@ public class KotlinUtil {
                     String name = argumentName.getAsName().asString();
                     if ("method".equals(name)) {
                         KtExpression argumentExpression = ktValueArgument.getArgumentExpression();
-                        if (argumentExpression instanceof KtCollectionLiteralExpression) {
-                            KtCollectionLiteralExpression expression = (KtCollectionLiteralExpression) argumentExpression;
+                        if (argumentExpression instanceof KtCollectionLiteralExpression expression) {
                             for (PsiElement child : expression.getChildren()) {
-                                if (!(child instanceof KtDotQualifiedExpression)) {
+                                if (!(child instanceof KtDotQualifiedExpression qualifiedExpression)) {
                                     continue;
                                 }
-                                KtDotQualifiedExpression qualifiedExpression = (KtDotQualifiedExpression) child;
                                 if (qualifiedExpression.getChildren().length != 2) {
                                     continue;
                                 }
-                                if (!(qualifiedExpression.getChildren()[0] instanceof KtNameReferenceExpression)
-                                        || !(qualifiedExpression.getChildren()[1] instanceof KtNameReferenceExpression)) {
+                                if (!(qualifiedExpression.getChildren()[0] instanceof KtNameReferenceExpression) || !(qualifiedExpression.getChildren()[1] instanceof KtNameReferenceExpression referenceExpression)) {
                                     continue;
                                 }
-                                KtNameReferenceExpression referenceExpression = (KtNameReferenceExpression) qualifiedExpression.getChildren()[1];
                                 // 获取到当前注解的 HttpMethods 的其中一个(GET|POST|...)
                                 final String currHttpMethod = referenceExpression.getText();
                                 serviceStub.method(HttpMethod.parse(currHttpMethod));
@@ -177,26 +168,23 @@ public class KotlinUtil {
                     }
                 }
                 KtExpression expression = ktValueArgument.getArgumentExpression();
-                if (expression instanceof KtStringTemplateExpression) {
-                    KtStringTemplateExpression stringTemplateExpression = (KtStringTemplateExpression) expression;
+                if (expression instanceof KtStringTemplateExpression stringTemplateExpression) {
                     final String currPath = stringTemplateExpression.getChildren()[0].getText();
                     // 当前 paths 的其中一个（@RequestMapping(path=["path1", "path2"])）
                     serviceStub.path(currPath);
                     continue;
                 }
-                if (!(expression instanceof KtCollectionLiteralExpression)) {
+                if (!(expression instanceof KtCollectionLiteralExpression collectionLiteralExpression)) {
                     continue;
                 }
-                KtCollectionLiteralExpression collectionLiteralExpression = (KtCollectionLiteralExpression) expression;
                 if (collectionLiteralExpression.getChildren().length == 0) {
                     // 未设置注解的 value：@GetMapping
                     serviceStub.path(null);
                 } else {
                     for (PsiElement psiElement : collectionLiteralExpression.getChildren()) {
-                        if (!(psiElement instanceof KtStringTemplateExpression)) {
+                        if (!(psiElement instanceof KtStringTemplateExpression stringTemplateExpression)) {
                             continue;
                         }
-                        KtStringTemplateExpression stringTemplateExpression = (KtStringTemplateExpression) psiElement;
                         final String currPath = stringTemplateExpression.getChildren()[0].getText();
                         // 当前 paths 的其中一个（@RequestMapping(path=["path1", "path2"])）
                         serviceStub.path(currPath);
@@ -254,22 +242,10 @@ public class KotlinUtil {
     @NotNull
     private Set<KtAnnotationEntry> findKtAnnotationEntryByName(@NotNull String name, boolean withLib) {
         String temp = name.contains(".") ? name.substring(name.lastIndexOf(".") + 1) : name;
-        Set<KtAnnotationEntry> collection = new HashSet<>(KotlinAnnotationsIndex.getInstance().get(
-                temp,
-                PROJECT,
-                MODULE.getModuleScope()
-        ));
+        Set<KtAnnotationEntry> collection = new HashSet<>(KotlinAnnotationsIndex.Helper.get(temp, PROJECT, MODULE.getModuleScope()));
         if (withLib) {
-            collection.addAll(KotlinAnnotationsIndex.getInstance().get(
-                    name,
-                    PROJECT,
-                    MODULE.getModuleWithLibrariesScope())
-            );
-            collection.addAll(KotlinAnnotationsIndex.getInstance().get(
-                    temp,
-                    PROJECT,
-                    MODULE.getModuleWithLibrariesScope())
-            );
+            collection.addAll(KotlinAnnotationsIndex.Helper.get(name, PROJECT, MODULE.getModuleWithLibrariesScope()));
+            collection.addAll(KotlinAnnotationsIndex.Helper.get(temp, PROJECT, MODULE.getModuleWithLibrariesScope()));
         }
         return collection;
     }

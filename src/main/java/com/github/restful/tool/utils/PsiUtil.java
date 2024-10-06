@@ -12,6 +12,7 @@ package com.github.restful.tool.utils;
 
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
+import com.intellij.psi.util.PsiTypesUtil;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -79,7 +80,7 @@ public class PsiUtil {
         final String canonicalText = psiType.getCanonicalText();
 
         // 基本类型  boolean
-        if (PsiType.BOOLEAN.equals(psiType) || "java.lang.Boolean".equals(canonicalText)) {
+        if (PsiTypes.booleanType().equals(psiType) || "java.lang.Boolean".equals(canonicalText)) {
             return false;
         }
 
@@ -88,15 +89,15 @@ public class PsiUtil {
             return "String";
         }
 
-        if (PsiType.LONG.equals(psiType) || "java.lang.Long".equals(canonicalText)) {
+        if (PsiTypes.longType().equals(psiType) || "java.lang.Long".equals(canonicalText)) {
             return 0L;
         }
 
-        if (PsiType.DOUBLE.equals(psiType) || "java.lang.Double".equals(canonicalText)) {
+        if (PsiTypes.doubleType().equals(psiType) || "java.lang.Double".equals(canonicalText)) {
             return 0D;
         }
 
-        if (PsiType.FLOAT.equals(psiType) || "java.lang.Float".equals(canonicalText)) {
+        if (PsiTypes.floatType().equals(psiType) || "java.lang.Float".equals(canonicalText)) {
             return 0F;
         }
 

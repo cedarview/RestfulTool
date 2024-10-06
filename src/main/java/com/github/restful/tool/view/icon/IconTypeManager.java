@@ -64,8 +64,7 @@ public final class IconTypeManager {
 
     @NotNull
     public static IconType getInstance(@NotNull Object obj) {
-        if (obj instanceof IconType) {
-            IconType iconType = (IconType) obj;
+        if (obj instanceof IconType iconType) {
             if (ICON_TYPES.containsValue(iconType)) {
                 return iconType;
             }

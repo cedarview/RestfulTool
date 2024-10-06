@@ -11,10 +11,8 @@
 package com.github.restful.tool.configuration;
 
 import com.github.restful.tool.beans.settings.Settings;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.*;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,7 +34,7 @@ public class RestfulSetting implements PersistentStateComponent<RestfulSetting> 
     }
 
     public static RestfulSetting getInstance() {
-        return ServiceManager.getService(RestfulSetting.class);
+        return ApplicationManager.getApplication().getService(RestfulSetting.class);
     }
 
     public boolean isModified(Settings changedSetting) {

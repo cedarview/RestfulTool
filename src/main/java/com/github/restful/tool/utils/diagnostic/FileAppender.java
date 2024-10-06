@@ -10,8 +10,8 @@
  */
 package com.github.restful.tool.utils.diagnostic;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import com.intellij.openapi.diagnostic.LogLevel;
+import com.intellij.openapi.diagnostic.Logger;
 import org.apache.log4j.PatternLayout;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  * @author ZhangYuanSheng
  * @version 1.0
  */
-public class FileAppender extends org.apache.log4j.FileAppender {
+public class FileAppender {
 
     public static final String DEFAULT_PATTERN = "[%-5p] %d{yyyy-MM-dd HH:mm:ss,SSS} method:%l%n%m%n";
 
@@ -28,30 +28,30 @@ public class FileAppender extends org.apache.log4j.FileAppender {
     }
 
     public FileAppender(@NotNull String logFile, @NotNull String pattern) {
-        setFile(logFile);
-        setEncoding("utf-8");
-        setLayout(new PatternLayout(pattern));
-        activateOptions();
+//        setFile(logFile);
+//        setEncoding("utf-8");
+//        setLayout(new PatternLayout(pattern));
+//        activateOptions();
     }
 
     public void applyDebug(@NotNull Logger logger) {
-        apply(logger, Level.DEBUG);
+        apply(logger, LogLevel.DEBUG);
     }
 
     public void applyInfo(@NotNull Logger logger) {
-        apply(logger, Level.INFO);
+        apply(logger, LogLevel.INFO);
     }
 
     public void applyWarn(@NotNull Logger logger) {
-        apply(logger, Level.WARN);
+        apply(logger, LogLevel.WARNING);
     }
 
     public void applyError(@NotNull Logger logger) {
-        apply(logger, Level.ERROR);
+        apply(logger, LogLevel.ERROR);
     }
 
-    public void apply(@NotNull Logger logger, @NotNull Level level) {
+    public void apply(@NotNull Logger logger, @NotNull LogLevel level) {
         logger.setLevel(level);
-        logger.addAppender(this);
+//        logger.addAppender(this);
     }
 }

@@ -3,7 +3,6 @@ package com.github.restful.tool.service;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +19,7 @@ public interface Notify {
      * @return this
      */
     static Notify getInstance(@NotNull Project project) {
-        return ServiceManager.getService(project, Notify.class);
+        return project.getService(Notify.class);
     }
 
     /**

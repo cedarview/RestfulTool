@@ -14,6 +14,7 @@ import com.github.restful.tool.beans.Request;
 import com.github.restful.tool.utils.Bundle;
 import com.github.restful.tool.utils.RestUtil;
 import com.github.restful.tool.view.window.frame.ServiceTree;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
@@ -41,6 +42,11 @@ public class CurrClassTreeAction extends AnAction implements TreeOption {
         this.requests = new HashMap<>(1);
         getTemplatePresentation().setText(Bundle.getString("action.ShowCurrClassServiceTree.text"));
         getTemplatePresentation().setDescription(Bundle.getString("action.ShowCurrClassServiceTree.description"));
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return super.getActionUpdateThread();
     }
 
     @Override

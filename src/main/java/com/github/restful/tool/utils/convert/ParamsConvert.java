@@ -186,7 +186,7 @@ public class ParamsConvert {
                 if (paramDefaultTypeValue instanceof Map) {
                     //noinspection unchecked,rawtypes
                     Map<String, Object> value = (Map) paramDefaultTypeValue;
-                    value.forEach(map::put);
+                    map.putAll(value);
                 } else {
                     map.put(parameterName, paramDefaultTypeValue);
                 }
@@ -220,10 +220,9 @@ public class ParamsConvert {
                         continue base;
                     } else {
                         for (ValueArgument valueArgument : valueArguments) {
-                            if (!(valueArgument instanceof KtValueArgument)) {
+                            if (!(valueArgument instanceof KtValueArgument ktValueArgument)) {
                                 continue;
                             }
-                            KtValueArgument ktValueArgument = (KtValueArgument) valueArgument;
                             if (ktValueArgument.isNamed()) {
                                 KtValueArgumentName argumentName = ktValueArgument.getArgumentName();
                                 if (argumentName == null) {
@@ -235,8 +234,7 @@ public class ParamsConvert {
                                 }
                             }
                             KtExpression expression = ktValueArgument.getArgumentExpression();
-                            if (expression instanceof KtStringTemplateExpression) {
-                                KtStringTemplateExpression stringTemplateExpression = (KtStringTemplateExpression) expression;
+                            if (expression instanceof KtStringTemplateExpression stringTemplateExpression) {
                                 paramName = stringTemplateExpression.getChildren()[0].getText();
                                 break;
                             }
@@ -255,16 +253,14 @@ public class ParamsConvert {
         if (expression == null) {
             return keep ? null : "";
         }
-        if (expression instanceof KtStringTemplateExpression) {
-            KtStringTemplateExpression templateExpression = (KtStringTemplateExpression) expression;
+        if (expression instanceof KtStringTemplateExpression templateExpression) {
             String text = templateExpression.getChildren()[0].getText();
             if (!keep && text == null) {
                 return "";
             }
             return text;
         }
-        if (expression instanceof KtCallExpression) {
-            KtCallExpression callExpression = (KtCallExpression) expression;
+        if (expression instanceof KtCallExpression callExpression) {
             return callExpression.getName();
         }
         return keep ? null : "";

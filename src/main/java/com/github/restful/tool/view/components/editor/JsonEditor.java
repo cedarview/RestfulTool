@@ -94,7 +94,7 @@ public class JsonEditor extends EditorTextField {
     }
 
     @Override
-    protected EditorEx createEditor() {
+    protected @NotNull EditorEx createEditor() {
         EditorEx editor = super.createEditor();
         initOneLineMode(editor);
         setupTextFieldEditor(editor);

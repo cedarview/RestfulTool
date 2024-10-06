@@ -2,7 +2,6 @@ package com.github.restful.tool.view.search;
 
 import com.github.restful.tool.beans.HttpMethod;
 import com.intellij.ide.util.gotoByName.ChooseByNameFilterConfiguration;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
@@ -24,7 +23,7 @@ public class GotoRequestConfiguration extends ChooseByNameFilterConfiguration<Ht
      * @return a configuration instance
      */
     public static GotoRequestConfiguration getInstance(Project project) {
-        return ServiceManager.getService(project, GotoRequestConfiguration.class);
+        return project.getService(GotoRequestConfiguration.class);
     }
 
     @Override

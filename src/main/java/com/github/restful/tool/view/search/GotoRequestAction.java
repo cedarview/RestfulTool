@@ -75,8 +75,7 @@ public class GotoRequestAction extends GotoActionBase implements DumbAware {
 
             @Override
             public void elementChosen(ChooseByNamePopup chooseByNamePopup, Object element) {
-                if (element instanceof RestServiceItem) {
-                    RestServiceItem navigationItem = (RestServiceItem) element;
+                if (element instanceof RestServiceItem navigationItem) {
                     if (navigationItem.canNavigate()) {
                         navigationItem.navigate(true);
                     }

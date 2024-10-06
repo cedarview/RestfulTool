@@ -1,6 +1,5 @@
 package com.github.restful.tool.service;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +20,7 @@ public interface CacheService<K, V> {
      * @return CacheService
      */
     static CacheService<?, ?> getInstance(@NotNull Project project) {
-        return ServiceManager.getService(project, CacheService.class);
+        return project.getService(CacheService.class);
     }
 
     /**

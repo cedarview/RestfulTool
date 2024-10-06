@@ -28,7 +28,7 @@ public class Icons {
 
     @NotNull
     public static Icon load(@NotNull String path) {
-        return IconManager.getInstance().getIcon(path, Icons.class);
+        return IconManager.getInstance().getIcon(path, Icons.class.getClassLoader());
     }
 
     /**
