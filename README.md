@@ -1,5 +1,9 @@
 # RestfulTool
 
+<!-- Plugin description -->
+
+<!-- Plugin description end -->
+
 <em style="color: red">This is not define in [~~RestfulToolkit~~]()</u></em>
 
 > - `min-version`: `201`
