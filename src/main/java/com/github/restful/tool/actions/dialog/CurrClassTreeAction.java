@@ -46,7 +46,7 @@ public class CurrClassTreeAction extends AnAction implements TreeOption {
 
     @Override
     public @NotNull ActionUpdateThread getActionUpdateThread() {
-        return super.getActionUpdateThread();
+        return ActionUpdateThread.BGT;
     }
 
     @Override

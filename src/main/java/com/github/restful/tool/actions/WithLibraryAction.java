@@ -15,6 +15,7 @@ import com.github.restful.tool.utils.Bundle;
 import com.github.restful.tool.view.window.RestfulToolWindowFactory;
 import com.github.restful.tool.view.window.frame.RightToolWindow;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.ToggleAction;
@@ -34,6 +35,11 @@ public class WithLibraryAction extends ToggleAction implements DumbAware {
     public WithLibraryAction() {
         getTemplatePresentation().setText(Bundle.getString("action.WithLibrary.text"));
         getTemplatePresentation().setIcon(AllIcons.ObjectBrowser.ShowLibraryContents);
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 
     @Override
