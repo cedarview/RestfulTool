@@ -10,6 +10,7 @@
  */
 package com.github.restful.tool.actions.copy;
 
+import com.github.restful.tool.i18n.SystemBundle;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
@@ -20,6 +21,10 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.0
  */
 public class OptionForEditorGroups extends DefaultActionGroup implements CopyOption {
+
+    public OptionForEditorGroups() {
+        super(SystemBundle.getString("plugin.name", new Object[0]), true);
+    }
 
     @Override
     public void update(@NotNull AnActionEvent e) {

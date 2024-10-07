@@ -1,7 +1,7 @@
 [versions]
 # libraries
 junit = "4.13.2"
-hutool = "5.3.9"
+hutool = "5.8.25"
 dom4j = "1.6.1"
 
 # plugins
