@@ -167,11 +167,12 @@ public class RestServiceItem implements NavigationItem {
         if (this.psiMethod != null) {
             Project project = this.psiMethod.getProject();
             GlobalSearchScope scope = this.psiMethod.getResolveScope();
+            GlobalSearchScope moduleWithDependenciesScope = module.getModuleWithDependenciesScope();
 
             return SystemUtil.buildUrl(
                     RestUtil.scanListenerProtocol(project, scope),
                     RestUtil.scanListenerPort(project, scope),
-                    RestUtil.scanContextPath(project, scope),
+                    RestUtil.scanContextPath(project, moduleWithDependenciesScope),
                     getUrl()
             );
         }

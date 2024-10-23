@@ -22,6 +22,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex;
 import com.intellij.psi.search.GlobalSearchScope;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,9 +42,17 @@ public class SpringHelper {
         if (controllers.isEmpty()) {
             return moduleList;
         }
-
+        
+        String contextPath = ProjectConfigUtil.getApplicationConfig(
+                project, module.getModuleScope(),
+                ProjectConfigUtil.SERVER_SERVLET_CONTEXT_PATH
+        );
         for (PsiClass controllerClass : controllers) {
-            moduleList.addAll(getRequests(controllerClass));
+            List<Request> requests = getRequests(controllerClass);
+            List<Request> requestsNew = requests.stream()
+                    .map(p -> new Request(p.getMethod(), contextPath+p.getPath(), p.getPsiElement()))
+                    .toList();
+            moduleList.addAll(requestsNew);
         }
 
         moduleList.addAll(KotlinUtil.getKotlinRequests(project, module));

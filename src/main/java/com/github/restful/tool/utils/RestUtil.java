@@ -93,13 +93,16 @@ public class RestUtil {
      * @return path
      */
     @Nullable
-    public static String scanContextPath(@NotNull Project project, @NotNull GlobalSearchScope scope) {
+    public static String scanContextPath(@NotNull Project project,
+            @NotNull GlobalSearchScope scope) {
         try {
-            String contextPath = ProjectConfigUtil.getApplicationConfig(
-                    project, scope,
-                    ProjectConfigUtil.SERVER_SERVLET_CONTEXT_PATH
-            );
-            return PomUtil.getContextPathWithPom(((ModuleWithDependenciesScope) scope).getModule(), contextPath);
+            String contextPath = ProjectConfigUtil.getApplicationConfig(project, scope,
+                    ProjectConfigUtil.SERVER_SERVLET_CONTEXT_PATH);
+            if (contextPath != null) {
+                return contextPath;
+            }
+            return PomUtil.getContextPathWithPom(((ModuleWithDependenciesScope) scope).getModule(),
+                    contextPath);
         } catch (Exception ignore) {
             return null;
         }
